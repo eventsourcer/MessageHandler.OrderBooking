@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.Projections", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.Events.IntegrationTests", "OrderBooking.Events.IntegrationTests\OrderBooking.Events.IntegrationTests.csproj", "{6B3347F3-0C44-4CF8-A288-21F822811FFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.Api", "OrderBooking.Api\OrderBooking.Api.csproj", "{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{6B3347F3-0C44-4CF8-A288-21F822811FFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B3347F3-0C44-4CF8-A288-21F822811FFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B3347F3-0C44-4CF8-A288-21F822811FFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
