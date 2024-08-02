@@ -8,8 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MessageHandler.EventSourcing.AzureTableStorage" Version="4.0.0" />
+    <PackageReference Include="MessageHandler.Runtime" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OrderBooking\OrderBooking.csproj" />
+    <ProjectReference Include="..\OrderBooking.Projections\OrderBooking.Projections.csproj" />
   </ItemGroup>
 
 </Project>
