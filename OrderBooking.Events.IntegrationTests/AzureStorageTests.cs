@@ -71,38 +71,4 @@ public class AzureStorageTests : IAsyncLifetime
         Assert.IsType<SalesOrderConfirmed>(history.Last());
         Environment.SetEnvironmentVariable("sarwan", "developer");
     }
-    [Fact]
-    public async Task GivenEventStream_WhenStoringEvents_ShouldGetThemBack1()
-    {
-        var streamId = "fe8430bf-00a4-42b7-b077-87d8fff4ba68";
-        var streamType = "OrderBooking";
-
-        var started = new BookingStarted("", new PurchaseOrder(""))
-        {
-            EventId = "89795ced-ea64-46c2-879e-10d285a09429",
-            SourceId = streamId,
-            Version = 1,
-        };
-        var confirmed = new SalesOrderConfirmed("", new PurchaseOrder(""))
-        {
-            EventId = "9a5937c2-5e14-461f-b452-fa504f300d15", // unique
-            SourceId = streamId,
-            Version = 2,
-            TargetBranchParentId = started.EventId
-        };
-
-        SourcedEvent[] eventStream = [confirmed, started];
-        var eventSource = new AzureTableStorageEventSource(_connection, _table);
-
-        await eventSource.Persist(streamType, streamId, eventStream);
-        var history = await eventSource.Load(streamType, streamId, 0);
-
-        Assert.Equal(2, history.Count());
-        Assert.Equal(started.EventId, history.First().EventId);
-        Assert.Equal(confirmed.EventId, history.Last().EventId);
-
-        Assert.IsType<BookingStarted>(history.First());
-        Assert.IsType<SalesOrderConfirmed>(history.Last());
-        Environment.SetEnvironmentVariable("sarwan", "developer");
-    }
 }
