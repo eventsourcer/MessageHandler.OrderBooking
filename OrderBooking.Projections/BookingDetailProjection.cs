@@ -3,21 +3,16 @@ using OrderBooking.Events;
 
 namespace OrderBooking.Projections;
 
-public class BookingProjection : 
-    IProjection<Booking, BookingStarted>,
+public class BookingDetailProjection : 
     IProjection<BookingDetail, BookingStarted>,
-    IProjection<Booking, SalesOrderConfirmed>
+    IProjection<BookingDetail, SalesOrderConfirmed>
 {
-    public void Project(Booking booking, BookingStarted bookingStarted)
-    {
-        booking.Status = BookingStatus.Pending;
-    }
     public void Project(BookingDetail booking, BookingStarted bookingStarted)
     {
         booking.SourceId = bookingStarted.SourceId;
         booking.Status = BookingStatus.Pending;
     }
-    public void Project(Booking booking, SalesOrderConfirmed salesOrderConfirmed)
+    public void Project(BookingDetail booking, SalesOrderConfirmed salesOrderConfirmed)
     {
         booking.Status = BookingStatus.Confirmed;
     }
