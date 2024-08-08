@@ -10,7 +10,7 @@ public class BookingProjection :
 {
     public void Project(Booking booking, BookingStarted bookingStarted)
     {
-        booking.Status = BookingStatus.Pending;
+        booking.Status = nameof(BookingStatus.Pending);
     }
     public void Project(BookingDetail booking, BookingStarted bookingStarted)
     {
@@ -19,6 +19,6 @@ public class BookingProjection :
     }
     public void Project(Booking booking, SalesOrderConfirmed salesOrderConfirmed)
     {
-        booking.Status = BookingStatus.Confirmed;
+        booking.Status = Enum.GetName(BookingStatus.Confirmed);
     }
 }

@@ -43,13 +43,13 @@ public class AzureStorageTests : IAsyncLifetime
         var streamId = "fe8430bf-00a4-42b7-b077-87d8fff4ba68";
         var streamType = "OrderBooking";
 
-        var started = new BookingStarted("", new PurchaseOrder(""))
+        var started = new BookingStarted("", new PurchaseOrder("", 1))
         {
             EventId = "89795ced-ea64-46c2-879e-10d285a09429",
             SourceId = streamId,
             Version = 1,
         };
-        var confirmed = new SalesOrderConfirmed("", new PurchaseOrder(""))
+        var confirmed = new SalesOrderConfirmed("", new PurchaseOrder("", 1))
         {
             EventId = "9a5937c2-5e14-461f-b452-fa504f300d15", // unique
             SourceId = streamId,

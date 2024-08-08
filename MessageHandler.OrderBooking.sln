@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.Events.Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.Api", "OrderBooking.Api\OrderBooking.Api.csproj", "{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.WebUI.Buyer", "OrderBooking.WebUI.Buyer\OrderBooking.WebUI.Buyer.csproj", "{D62F2366-A8B3-45BB-B847-4E54BB934FB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.ComponentTests", "OrderBooking.ComponentTests\OrderBooking.ComponentTests.csproj", "{F85DCF5E-98EF-47F4-9D62-73D504586A28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +52,13 @@ Global
 		{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3608E7E1-BD86-4C0F-8A8B-5501730C9F96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D62F2366-A8B3-45BB-B847-4E54BB934FB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D62F2366-A8B3-45BB-B847-4E54BB934FB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D62F2366-A8B3-45BB-B847-4E54BB934FB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D62F2366-A8B3-45BB-B847-4E54BB934FB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F85DCF5E-98EF-47F4-9D62-73D504586A28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F85DCF5E-98EF-47F4-9D62-73D504586A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F85DCF5E-98EF-47F4-9D62-73D504586A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F85DCF5E-98EF-47F4-9D62-73D504586A28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -14,7 +14,7 @@ public class ProjectionTests
         // Given
         SourcedEvent[] history =
         [
-            new BookingStarted("1", new PurchaseOrder("")),
+            new BookingStarted("1", new PurchaseOrder("", 1)),
         ];
         var booking = new Booking();
     
@@ -23,7 +23,7 @@ public class ProjectionTests
         invoker.Invoke(booking, history);
     
         // Then
-        Assert.Equal(BookingStatus.Pending, booking.Status);
+        Assert.Equal(nameof(BookingStatus.Pending), booking.Status);
     }
     [Fact]
     public void GivenBookingConfirmed_ShouldSetStatusConfirmed()
@@ -31,8 +31,8 @@ public class ProjectionTests
         // Given
         SourcedEvent[] history =
         [
-            new BookingStarted("1", new PurchaseOrder("")),
-            new SalesOrderConfirmed("", new PurchaseOrder(""))
+            new BookingStarted("1", new PurchaseOrder("", 1)),
+            new SalesOrderConfirmed("", new PurchaseOrder("", 1))
         ];
     
         // When
@@ -41,6 +41,6 @@ public class ProjectionTests
         invoker.Invoke(booking, history);
     
         // Then
-        Assert.Equal(BookingStatus.Confirmed, booking.Status);
+        Assert.Equal(nameof(BookingStatus.Confirmed), booking.Status);
     }
 }
