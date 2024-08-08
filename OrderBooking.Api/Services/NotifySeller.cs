@@ -11,7 +11,7 @@ public class NotifySeller(IHubContext<EventsHub> hubContext) : MessageHandler.Ev
         List<Task> tasks = []; 
         foreach (var item in pendingEvents)
         {
-            tasks.Add(_hubContext.Clients.Group("all").SendAsync("Notify", new CancellationToken()));
+            tasks.Add(_hubContext.Clients.Group("all").SendAsync("Notify", item));
         }
         return Task.WhenAll(tasks);
     }
