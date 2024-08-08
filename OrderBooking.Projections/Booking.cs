@@ -2,5 +2,5 @@
 
 public class Booking
 {
-    public BookingStatus Status { get; set; }
+    public string? Status { get; set; }
 }

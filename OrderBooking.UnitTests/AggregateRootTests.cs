@@ -9,7 +9,7 @@ public class AggregateRootTests
     public void GivenValidPurchaseOrder_OrderShouldBeStarted()
     {
         // given
-        var purchaseOrder = new PurchaseOrder("sarwan");
+        var purchaseOrder = new PurchaseOrder("sarwan", 1);
 
         // when
         var orderBooking = new OrderBookingAggregate();
@@ -26,7 +26,7 @@ public class AggregateRootTests
     public void GivenValidPurchaseOrder_WhenPlacingBookingTwice_ShouldStartOnlyOnce()
     {
         // Given
-        var purchaseOrder = new PurchaseOrder("sarwan");
+        var purchaseOrder = new PurchaseOrder("sarwan", 1);
     
         // When
         var aggregate = new OrderBookingAggregate();
@@ -41,7 +41,7 @@ public class AggregateRootTests
     public void GivenValidPurchaseOrder_PurchaseOrderIsCarriedOverEvent()
     {
         // Given
-        var purchaseOrder = new PurchaseOrder("sarwan");
+        var purchaseOrder = new PurchaseOrder("sarwan", 1);
     
         // When
         var aggregate = new OrderBookingAggregate();

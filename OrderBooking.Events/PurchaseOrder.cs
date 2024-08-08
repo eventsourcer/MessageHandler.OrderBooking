@@ -1,3 +1,3 @@
 namespace OrderBooking.Events;
 
-public record PurchaseOrder(string Name);
+public record PurchaseOrder(string Name, int Amount);
