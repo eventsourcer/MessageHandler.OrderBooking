@@ -6,11 +6,15 @@ using MessageHandler.EventSourcing.Projections;
 using MessageHandler.Runtime;
 using MessageHandler.Runtime.ConfigurationSettings;
 using MessageHandler.Runtime.Licensing;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.VisualBasic;
 using OrderBooking;
+using OrderBooking.Api;
 using OrderBooking.Api.Commands;
+using OrderBooking.Events;
 using OrderBooking.Projections;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +44,16 @@ builder.Services.AddMessageHandler(nameof(OrderBookingAggregate), runtimeConfigu
     });
 });
 
+builder.Services.AddCorsConfguration(config =>
+{
+    config.AddPolicy("all", policy =>
+    {
+        policy.AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin();
+    });
+});
+
 
 var app = builder.Build();
 
@@ -51,28 +65,28 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-// app.UseCors("AllowAll");
+app.UseCors("all");
 
 
-app.MapPost("api/orderbooking/{bookingId}", 
+app.MapPost("api/orderbooking/{id}", 
 async (
     IEventSourcedRepository<OrderBookingAggregate> repo,
-    PlacePurchaseOrder command,
-    string bookingId
+    string id,
+    PlacePurchaseOrder command
     ) =>
 {
-    var booking = await repo.Get(bookingId);
-    booking.PlacePurchaseOrder(command.PurchaseOrder);
+    var booking = await repo.Get(id);
+    booking.PlacePurchaseOrder(new PurchaseOrder(command.Name, command.Amount));
 
     await repo.Flush();
 
     return Results.Ok(booking.Id);
 });
 
-app.MapGet("api/orderbooking", async(IRestoreProjections<Booking> projector, string id) =>
+app.MapGet("api/orderbooking/{id}", async(IRestoreProjections<Booking> projector, string id) =>
     Results.Ok(await projector.Restore(nameof(OrderBookingAggregate), id))
 );
-app.MapGet("api/orderbookingdetailed", async(IRestoreProjections<BookingDetail> projector, string id) =>
+app.MapGet("api/orderbookingdetailed/{id}", async(IRestoreProjections<BookingDetail> projector, string id) =>
     Results.Ok(await projector.Restore(nameof(OrderBookingAggregate), id))
 );
 
