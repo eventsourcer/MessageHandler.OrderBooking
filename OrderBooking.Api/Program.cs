@@ -14,6 +14,7 @@ using Microsoft.VisualBasic;
 using OrderBooking;
 using OrderBooking.Api;
 using OrderBooking.Api.Commands;
+using OrderBooking.Api.Services;
 using OrderBooking.Events;
 using OrderBooking.Projections;
 
@@ -37,12 +38,15 @@ builder.Services.AddMessageHandler(nameof(OrderBookingAggregate), runtimeConfigu
             from => from.AzureTableStorage(connectionString, nameof(OrderBookingAggregate)),
             into =>
             {
-                into.Aggregate<OrderBookingAggregate>();
+                into.Aggregate<OrderBookingAggregate>()
+                .EnableTransientChannel<NotifySeller>();
                 into.Projection<BookingProjection>();
                 // into.Projection<BookingDetailProjection>();
             });
     });
 });
+
+builder.Services.AddSignalR();
 
 builder.Services.AddCorsConfguration(config =>
 {
@@ -50,7 +54,8 @@ builder.Services.AddCorsConfguration(config =>
     {
         policy.AllowAnyHeader()
         .AllowAnyMethod()
-        .AllowAnyOrigin();
+        .AllowCredentials()
+        .SetIsOriginAllowed(hostName => true);
     });
 });
 
@@ -67,6 +72,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("all");
 
+app.MapHub<EventsHub>("/events");
 
 app.MapPost("api/orderbooking/{id}", 
 async (
