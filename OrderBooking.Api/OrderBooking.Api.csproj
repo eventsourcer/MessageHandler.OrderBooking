@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="MessageHandler.EventSourcing.AzureTableStorage" Version="4.0.0" />
+    <PackageReference Include="MessageHandler.EventSourcing.Outbox" Version="4.0.0" />
     <PackageReference Include="MessageHandler.Runtime" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />

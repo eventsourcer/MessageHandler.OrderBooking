@@ -2,8 +2,10 @@ using System.Collections.Concurrent;
 using MessageHandler.EventSourcing;
 using MessageHandler.EventSourcing.AzureTableStorage;
 using MessageHandler.EventSourcing.DomainModel;
+using MessageHandler.EventSourcing.Outbox;
 using MessageHandler.EventSourcing.Projections;
 using MessageHandler.Runtime;
+using MessageHandler.Runtime.AtomicProcessing;
 using MessageHandler.Runtime.ConfigurationSettings;
 using MessageHandler.Runtime.Licensing;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +41,10 @@ builder.Services.AddMessageHandler(nameof(OrderBookingAggregate), runtimeConfigu
             into =>
             {
                 into.Aggregate<OrderBookingAggregate>()
-                .EnableTransientChannel<NotifySeller>();
+                .EnableTransientChannel<NotifySeller>()
+                .EnableOutbox(nameof(OrderBookingAggregate), nameof(OrderBooking.Api), pipeline =>
+                    pipeline.RouteMessages(to => to.Topic("orderbooking-queue", builder.Configuration.GetValue<string>("ServiceBusConnection")))
+                );
                 into.Projection<BookingProjection>();
                 // into.Projection<BookingDetailProjection>();
             });

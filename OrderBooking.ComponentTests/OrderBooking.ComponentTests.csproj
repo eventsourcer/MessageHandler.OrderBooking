@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OrderBooking.Api\OrderBooking.Api.csproj" />
+    <ProjectReference Include="..\OrderBooking.Worker\OrderBooking.Worker.csproj" />
   </ItemGroup>
 
 </Project>

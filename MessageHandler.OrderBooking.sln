@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.ComponentTests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.WebUI.Seller", "OrderBooking.WebUI.Seller\OrderBooking.WebUI.Seller.csproj", "{38201D1A-747E-4A30-BFDF-45418AEF3532}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.Worker", "OrderBooking.Worker\OrderBooking.Worker.csproj", "{03398897-1FF9-4FCC-A963-0DC697DDE2E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +68,9 @@ Global
 		{38201D1A-747E-4A30-BFDF-45418AEF3532}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38201D1A-747E-4A30-BFDF-45418AEF3532}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38201D1A-747E-4A30-BFDF-45418AEF3532}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03398897-1FF9-4FCC-A963-0DC697DDE2E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03398897-1FF9-4FCC-A963-0DC697DDE2E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03398897-1FF9-4FCC-A963-0DC697DDE2E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03398897-1FF9-4FCC-A963-0DC697DDE2E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
