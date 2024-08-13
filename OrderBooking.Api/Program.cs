@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using MessageHandler.EventSourcing;
 using MessageHandler.EventSourcing.AzureTableStorage;
 using MessageHandler.EventSourcing.DomainModel;
@@ -6,13 +5,7 @@ using MessageHandler.EventSourcing.Outbox;
 using MessageHandler.EventSourcing.Projections;
 using MessageHandler.Runtime;
 using MessageHandler.Runtime.AtomicProcessing;
-using MessageHandler.Runtime.ConfigurationSettings;
 using MessageHandler.Runtime.Licensing;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
-using Microsoft.VisualBasic;
 using OrderBooking;
 using OrderBooking.Api;
 using OrderBooking.Api.Commands;
@@ -33,7 +26,7 @@ builder.Services.AddMessageHandler(nameof(OrderBookingAggregate), runtimeConfigu
                                    ?? throw new Exception("No 'TableStorageConnection' was provided. Use User Secrets or specify via environment variable.");
 
     runtimeConfiguration.License(builder.Configuration["LicenseToken"]);
-    
+
     runtimeConfiguration.EventSourcing(source =>
     {
         source.Stream(nameof(OrderBookingAggregate),
@@ -43,13 +36,22 @@ builder.Services.AddMessageHandler(nameof(OrderBookingAggregate), runtimeConfigu
                 into.Aggregate<OrderBookingAggregate>()
                 .EnableTransientChannel<NotifySeller>()
                 .EnableOutbox(nameof(OrderBookingAggregate), nameof(OrderBooking.Api), pipeline =>
-                    pipeline.RouteMessages(to => to.Topic("orderbooking-queue", builder.Configuration.GetValue<string>("ServiceBusConnection")))
+                    pipeline.RouteMessages(to => to.Topic("asynchandler-topic", builder.Configuration.GetValue<string>("ServiceBusConnection")))
                 );
                 into.Projection<BookingProjection>();
                 // into.Projection<BookingDetailProjection>();
             });
     });
 });
+
+// class Config 
+// {
+//     public Task Go()
+//     {
+//         Transport
+//     }
+// }
+
 
 builder.Services.AddSignalR();
 
