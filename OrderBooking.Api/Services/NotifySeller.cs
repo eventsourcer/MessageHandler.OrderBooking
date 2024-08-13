@@ -1,9 +1,10 @@
 using MessageHandler.EventSourcing.Contracts;
+using MessageHandler.EventSourcing.DomainModel;
 using Microsoft.AspNetCore.SignalR;
 
 namespace OrderBooking.Api.Services;
 
-public class NotifySeller(IHubContext<EventsHub> hubContext) : MessageHandler.EventSourcing.DomainModel.IChannel
+public class NotifySeller(IHubContext<EventsHub> hubContext) : IChannel
 {
     private readonly IHubContext<EventsHub> _hubContext = hubContext;
     public Task Push(IEnumerable<SourcedEvent> pendingEvents)
