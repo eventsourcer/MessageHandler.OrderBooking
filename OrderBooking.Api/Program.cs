@@ -44,16 +44,9 @@ builder.Services.AddMessageHandler(nameof(OrderBookingAggregate), runtimeConfigu
     });
 });
 
-// class Config 
-// {
-//     public Task Go()
-//     {
-//         Transport
-//     }
-// }
-
-
 builder.Services.AddSignalR();
+
+builder.Services.AddSearchConfiguration(builder.Configuration["SearchEndpoint"] ?? "", builder.Configuration["SearchApiKey"] ?? "");
 
 builder.Services.AddCorsConfguration(config =>
 {

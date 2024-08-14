@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Search.Documents" Version="11.6.0" />
     <PackageReference Include="MessageHandler.EventSourcing.AzureTableStorage" Version="4.0.0" />
     <PackageReference Include="MessageHandler.EventSourcing.Outbox" Version="4.0.0" />
     <PackageReference Include="MessageHandler.Runtime" Version="4.0.0" />

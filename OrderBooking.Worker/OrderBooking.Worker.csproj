@@ -19,5 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OrderBooking.Events\OrderBooking.Events.csproj" />
+    <ProjectReference Include="..\OrderBooking.Projections\OrderBooking.Projections.csproj" />
   </ItemGroup>
 </Project>
