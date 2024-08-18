@@ -1,5 +1,6 @@
 using MessageHandler.EventSourcing.Projections;
 using OrderBooking.Events;
+using OrderBooking.Projections;
 
 public class SearchProjection :
     IProjection<SalesOrder, BookingStarted>,
@@ -9,11 +10,11 @@ public class SearchProjection :
     {
         salesOrder.Name = msg.Name;
         salesOrder.Amount = msg.PurchaseOrder?.Amount ?? 0;
-        salesOrder.Status = "Pending";
+        salesOrder.Status = nameof(BookingStatus.Pending);
     }
 
     public void Project(SalesOrder salesOrder, SalesOrderConfirmed msg)
     {
-        salesOrder.Status = "Confirmed";
+        salesOrder.Status = nameof(BookingStatus.Confirmed);
     }
 }
