@@ -1,4 +1,5 @@
 using FluentEmail.Core;
+using FluentEmail.Razor;
 using Microsoft.Extensions.Options;
 
 namespace OrderBooking.Worker;
@@ -10,7 +11,8 @@ public class EmailService : IEmailService
 
         public EmailService(IServiceProvider serviceProvider)
         {
-            _fluentEmail = serviceProvider.GetRequiredService<IFluentEmail>();
+            var scope = serviceProvider.CreateScope();
+            _fluentEmail = scope.ServiceProvider.GetRequiredService<IFluentEmail>();
             _settings = serviceProvider.GetRequiredService<IOptions<EmailSettings>>().Value;
         }
 
@@ -23,8 +25,7 @@ public class EmailService : IEmailService
         }
         public async Task SendAsync(string sellerEmail, string buyeremail, string subject, string body)
         {
-            var result = await _fluentEmail.SetFrom(sellerEmail)
-            .To(buyeremail)
+            var result = await _fluentEmail.To(buyeremail)
             .Subject(subject)
             .Body($@"{body}")
             .SendAsync();

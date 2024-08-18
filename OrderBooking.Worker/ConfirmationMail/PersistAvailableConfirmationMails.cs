@@ -14,9 +14,9 @@ public class PersistAvailableConfirmationMails : IPersistAvailableConfirmationMa
 
     private readonly string getAvailableConfirmationMailSqlCommand = 
 @"WITH task AS (
-SELECT TOP(1) [dbo].[SalesOrderConfirmations].*, [dbo].[NotificicationPreferences].EmailAddress as BuyerEmailAddress
+SELECT TOP(1) [dbo].[SalesOrderConfirmations].*, [dbo].[NotificationPreferences].EmailAddress as BuyerEmailAddress
 FROM[dbo].[SalesOrderConfirmations]
-        INNER JOIN[dbo].[NotificicationPreferences] on[dbo].[SalesOrderConfirmations].[BuyerId] = [dbo].[NotificicationPreferences].[BuyerId]
+        INNER JOIN[dbo].[NotificationPreferences] on[dbo].[SalesOrderConfirmations].[BuyerId] = [dbo].[NotificationPreferences].[BuyerId]
         WHERE[dbo].[SalesOrderConfirmations].[Status] = 'Pending')
 UPDATE task
 SET [Status] = 'Processing'
@@ -42,10 +42,10 @@ OUTPUT
             return null;
         }
 
-        return await ToConfirmationMail(dataReader);
+        return await ToConfirmationMail1(dataReader);
     }
 
-    private async Task<ConfirmationMail> ToConfirmationMail(SqlDataReader dataReader)
+    private async Task<ConfirmationMail> ToConfirmationMail1(SqlDataReader dataReader)
     {
         return new ConfirmationMail
         {
@@ -56,6 +56,19 @@ OUTPUT
             EmailSubject = await dataReader.GetFieldValueAsync<string>(4),
             EmailBody = await dataReader.GetFieldValueAsync<string>(5),
             Status = await dataReader.GetFieldValueAsync<string>(6)
+        };
+    }
+    private async Task<ConfirmationMail> ToConfirmationMail2(SqlDataReader dataReader)
+    {
+        return new ConfirmationMail
+        {
+            OrderId = await dataReader.GetFieldValueAsync<string>(0),
+            BuyerId = await dataReader.GetFieldValueAsync<string>(1),
+            SenderEmailAddress = await dataReader.GetFieldValueAsync<string>(2),
+            // BuyerEmailAddress = await dataReader.GetFieldValueAsync<string>(3),
+            EmailSubject = await dataReader.GetFieldValueAsync<string>(3),
+            EmailBody = await dataReader.GetFieldValueAsync<string>(4),
+            Status = await dataReader.GetFieldValueAsync<string>(5)
         };
     }
     public async Task MarkAsSent(ConfirmationMail mail)
@@ -81,7 +94,7 @@ OUTPUT
     private readonly string selectSqlCommand = @"SELECT * FROM [dbo].[SalesOrderConfirmations] WHERE [OrderId] = @orderId;";
     private readonly string insertSqlCommand = @"INSERT INTO [dbo].[SalesOrderConfirmations] ([OrderId], [BuyerId], [SenderEmailAddress], [EmailSubject], [EmailBody], [Status]) VALUES (@orderId, @buyerId, @senderEmailAddress, @emailSubject, @emailBody, @status);";
     private readonly string updateSqlCommand = @"UPDATE [dbo].[SalesOrderConfirmations] SET [Status] = @status Where [OrderId] = @orderId;";
-    public async Task<ConfirmationMail?> GetConfirmationMail(string id)
+    public async Task<ConfirmationMail> GetConfirmationMail(string id)
     {
         var connection = new SqlConnection(connectionstring);
         connection.Open();
@@ -93,10 +106,10 @@ OUTPUT
 
         if (!await dataReader.ReadAsync())
         {
-            return null;
+            return new ConfirmationMail();
         }
 
-        return await ToConfirmationMail(dataReader);
+        return await ToConfirmationMail1(dataReader);
     }
 
     public async Task Insert(ConfirmationMail mail)
@@ -128,11 +141,11 @@ OUTPUT
 
 public class ConfirmationMail
 {
-    public required string OrderId { get; set; }
-    public required string BuyerId { get; set; }
-    public required string SenderEmailAddress { get; set; }
-    public required string BuyerEmailAddress { get; set; }
-    public required string EmailSubject { get; set; }
-    public required string EmailBody { get; set; }
-    public required string Status { get; set; }
+    public string OrderId { get; set; } = string.Empty;
+    public string BuyerId { get; set; } = string.Empty;
+    public string SenderEmailAddress { get; set; } = string.Empty;
+    public string BuyerEmailAddress { get; set; } = string.Empty;
+    public string EmailSubject { get; set; } = string.Empty;
+    public string EmailBody { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
 }

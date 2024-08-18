@@ -5,6 +5,8 @@ using MessageHandler.EventSourcing.AzureTableStorage;
 using MessageHandler.Runtime;
 using MessageHandler.Runtime.AtomicProcessing;
 using MessageHandler.Runtime.Licensing;
+using NotificationPreferences;
+using NotificationPreferences.Events;
 using OrderBooking.Api.Commands;
 using OrderBooking.Events;
 using OrderBooking.Worker;
@@ -15,12 +17,12 @@ builder.Services.AddMessageHandler(nameof(OrderBooking.Worker), handlerRuntime =
 {
     handlerRuntime.License(builder.Configuration["LicenseToken"]);
     var serviceBusConnection = builder.Configuration["ServiceBusConnection"];
-    handlerRuntime.AtomicProcessingPipeline(pipeline =>
-    {
-        pipeline.PullMessagesFrom(p => p.Topic(name: "asynchandler-topic", subscription: "orderbooking.worker", serviceBusConnection));
-        pipeline.DetectTypesInAssembly(typeof(BookingStarted).Assembly);
-        pipeline.HandleMessagesWith<SendEmailNotification>();
-    });
+    // handlerRuntime.AtomicProcessingPipeline(pipeline =>
+    // {
+    //     pipeline.PullMessagesFrom(p => p.Topic(name: "asynchandler-topic", subscription: "orderbooking.worker", serviceBusConnection));
+    //     pipeline.DetectTypesInAssembly(typeof(BookingStarted).Assembly);
+    //     pipeline.HandleMessagesWith<SendEmailNotification>();
+    // });
     handlerRuntime.EventSourcing(source =>
     {
         source.Stream("OrderBookingAggregate",
@@ -29,6 +31,7 @@ builder.Services.AddMessageHandler(nameof(OrderBooking.Worker), handlerRuntime =
         {
             to.Projection<SearchProjection>();
             to.Projection<ConfirmationMailProjection>();
+            to.Projection<NotificationPreferenceProjection>();
         }
         );
     });
@@ -46,11 +49,18 @@ builder.Services.AddMessageHandler(nameof(OrderBooking.Worker), handlerRuntime =
         pipeline.HandleMessagesWith<IndexConfirmationMail>();
         pipeline.HandleMessagesWith<SetConfirmationMailAsPending>();
     });
+    handlerRuntime.AtomicProcessingPipeline(pipeline =>
+    {
+        pipeline.PullMessagesFrom(p => p.Topic(name: "asynchandler-notifications-topic", subscription: "asynchandler-notifications-subscription", serviceBusConnection));
+        pipeline.DetectTypesInAssembly(typeof(ConfirmationEmailSet).Assembly);
+        pipeline.HandleMessagesWith<IndexNotificationPreferences>();
+    });
 });
 
 var emailSettings = builder.Configuration.GetSection(EmailSettings.Section).Get<EmailSettings>() ?? 
 throw new Exception("Email settings not provided");
 
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection(EmailSettings.Section));
 builder.Services.AddFluentEmail(emailSettings.FromAddress)
 .AddSmtpSender(
     emailSettings.Smtp,
@@ -58,15 +68,15 @@ builder.Services.AddFluentEmail(emailSettings.FromAddress)
     emailSettings.Username,
     emailSettings.Password);
 
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection(EmailSettings.Section));
 
-builder.Services.AddSingleton<IEmailService>(sp => new EmailService(sp));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 builder.Services.AddAzureSearch(builder.Configuration["SearchEndpoint"] ?? "", builder.Configuration["SearchApiKey"] ?? "");
 
-builder.Services.AddHostedService<ConfirmationMailWorker>();
 builder.Services.AddSingleton<SendAvailableConfirmationEmails>();
 builder.Services.AddSingleton<IPersistAvailableConfirmationMails>(new PersistAvailableConfirmationMails(builder.Configuration["SqlServerConnection"] ?? ""));
+builder.Services.AddSingleton<IPersistNotificationPreferences>(new PersistNotificationPreferencesToSqlServer(builder.Configuration["SqlServerConnection"] ?? ""));
 
+builder.Services.AddHostedService<ConfirmationMailWorker>();
 var host = builder.Build();
 host.Run();
