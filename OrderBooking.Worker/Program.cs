@@ -25,7 +25,11 @@ builder.Services.AddMessageHandler(nameof(OrderBooking.Worker), handlerRuntime =
     {
         source.Stream("OrderBookingAggregate",
         from => from.AzureTableStorage(builder.Configuration["TableStorageConnection"], "OrderBookingAggregate"),
-        to => to.Projection<SearchProjection>()
+        to =>
+        {
+            to.Projection<SearchProjection>();
+            to.Projection<ConfirmationMailProjection>();
+        }
         );
     });
     handlerRuntime.AtomicProcessingPipeline(pipeline =>
@@ -33,6 +37,14 @@ builder.Services.AddMessageHandler(nameof(OrderBooking.Worker), handlerRuntime =
         pipeline.PullMessagesFrom(p => p.Topic(name: "asynchandler-topic", subscription: "orderbooking.indexing", serviceBusConnection));
         pipeline.DetectTypesInAssembly(typeof(BookingStarted).Assembly);
         pipeline.HandleMessagesWith<IndexSalesOrder>();
+        pipeline.HandleMessagesWith<ConfirmIndexSalesOrder>();
+    });
+    handlerRuntime.AtomicProcessingPipeline(pipeline =>
+    {
+        pipeline.PullMessagesFrom(p => p.Topic(name: "asynchandler-topic", subscription: "orderconfirmation.indexing", serviceBusConnection));
+        pipeline.DetectTypesInAssembly(typeof(BookingStarted).Assembly);
+        pipeline.HandleMessagesWith<IndexConfirmationMail>();
+        pipeline.HandleMessagesWith<SetConfirmationMailAsPending>();
     });
 });
 
@@ -51,6 +63,10 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection(Email
 builder.Services.AddSingleton<IEmailService>(sp => new EmailService(sp));
 
 builder.Services.AddAzureSearch(builder.Configuration["SearchEndpoint"] ?? "", builder.Configuration["SearchApiKey"] ?? "");
+
+builder.Services.AddHostedService<ConfirmationMailWorker>();
+builder.Services.AddSingleton<SendAvailableConfirmationEmails>();
+builder.Services.AddSingleton<IPersistAvailableConfirmationMails>(new PersistAvailableConfirmationMails(builder.Configuration["SqlServerConnection"] ?? ""));
 
 var host = builder.Build();
 host.Run();

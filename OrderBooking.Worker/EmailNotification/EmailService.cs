@@ -21,4 +21,12 @@ public class EmailService : IEmailService
             .Body($@"{_settings.Body}{errorMessage}")
             .SendAsync();
         }
+        public async Task SendAsync(string sellerEmail, string buyeremail, string subject, string body)
+        {
+            var result = await _fluentEmail.SetFrom(sellerEmail)
+            .To(buyeremail)
+            .Subject(subject)
+            .Body($@"{body}")
+            .SendAsync();
+        }
     }

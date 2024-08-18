@@ -1,4 +1,4 @@
-namespace OrderBooking.Projections;
+namespace OrderBooking;
 
 public enum BookingStatus
 {

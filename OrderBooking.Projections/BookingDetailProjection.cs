@@ -9,7 +9,7 @@ public class BookingDetailProjection :
 {
     public void Project(BookingDetail booking, BookingStarted bookingStarted)
     {
-        booking.SourceId = bookingStarted.SourceId;
+        booking.SourceId = bookingStarted.BookingId;
         booking.Status = BookingStatus.Pending;
     }
     public void Project(BookingDetail booking, SalesOrderConfirmed salesOrderConfirmed)

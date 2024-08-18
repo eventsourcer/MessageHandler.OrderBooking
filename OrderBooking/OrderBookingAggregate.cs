@@ -3,9 +3,11 @@ using OrderBooking.Events;
 
 namespace OrderBooking;
 
-public class OrderBookingAggregate : EventSourced, IApply<BookingStarted>
+public class OrderBookingAggregate : EventSourced, IApply<BookingStarted>, IApply<SalesOrderConfirmed>
 {
+    // private BookingStatus BookingStatus { get; set; }
     private bool _alreadyStarted;
+    private bool _confirmed;
     public OrderBookingAggregate() : base(Guid.NewGuid().ToString())
     {
         
@@ -14,9 +16,15 @@ public class OrderBookingAggregate : EventSourced, IApply<BookingStarted>
     {
         
     }
-    public void Apply(BookingStarted evt)
+    public void Apply(BookingStarted bookingStarted)
     {
+        // BookingStatus = BookingStatus.Pending;
         _alreadyStarted = true;
+    }
+    public void Apply(SalesOrderConfirmed orderConfirmed)
+    {
+        // BookingStatus = BookingStatus.Confirmed;
+        _confirmed = true;
     }
 
     public void PlacePurchaseOrder(PurchaseOrder purchaseOrder)
@@ -24,5 +32,11 @@ public class OrderBookingAggregate : EventSourced, IApply<BookingStarted>
         if(_alreadyStarted) return;
         
         Emit(new BookingStarted(Id, purchaseOrder));
+    }
+    public void ConfirmSalesOrder()
+    {
+        if(_confirmed) return;
+
+        Emit(new SalesOrderConfirmed(Id));
     }
 }

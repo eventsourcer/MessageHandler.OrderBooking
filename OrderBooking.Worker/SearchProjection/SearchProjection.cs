@@ -1,4 +1,5 @@
 using MessageHandler.EventSourcing.Projections;
+using OrderBooking;
 using OrderBooking.Events;
 using OrderBooking.Projections;
 
