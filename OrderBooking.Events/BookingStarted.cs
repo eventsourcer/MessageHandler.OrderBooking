@@ -2,10 +2,10 @@
 
 namespace OrderBooking.Events;
 
-public class BookingStarted(string bookingId, PurchaseOrder purchaseOrder) : SourcedEvent
+public class BookingStarted(string bookingId, string buyerId, string name, PurchaseOrder purchaseOrder) : SourcedEvent
 {
     public string BookingId => bookingId;
-    public string Name => purchaseOrder.Name;
+    public string BuyerId => buyerId;
+    public string Name => name;
     public PurchaseOrder PurchaseOrder => purchaseOrder;
-    public string BuyerId => purchaseOrder.BuyerId;
 }

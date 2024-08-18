@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Search.Documents" Version="11.6.0" />
     <PackageReference Include="FluentEmail.Core" Version="3.0.2" />
+    <PackageReference Include="FluentEmail.Razor" Version="3.0.2" />
     <PackageReference Include="FluentEmail.Smtp" Version="3.0.2" />
     <PackageReference Include="MessageHandler.EventSourcing.AzureTableStorage" Version="4.0.0" />
     <PackageReference Include="MessageHandler.Runtime.AtomicProcessing" Version="4.0.0" />
@@ -21,5 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OrderBooking.Events\OrderBooking.Events.csproj" />
     <ProjectReference Include="..\OrderBooking.Projections\OrderBooking.Projections.csproj" />
+    <ProjectReference Include="..\NotificationPreferences.Events\NotificationPreferences.Events.csproj" />
+    <ProjectReference Include="..\NotificationPreferences\NotificationPreferences.csproj" />
   </ItemGroup>
 </Project>

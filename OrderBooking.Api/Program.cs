@@ -1,3 +1,4 @@
+using Azure.Core.Pipeline;
 using Azure.Search.Documents;
 using MessageHandler.EventSourcing;
 using MessageHandler.EventSourcing.AzureTableStorage;
@@ -8,6 +9,7 @@ using MessageHandler.Runtime;
 using MessageHandler.Runtime.AtomicProcessing;
 using MessageHandler.Runtime.Licensing;
 using Microsoft.AspNetCore.Http.HttpResults;
+using NotificationPreferences;
 using OrderBooking;
 using OrderBooking.Api;
 using OrderBooking.Api.Commands;
@@ -44,6 +46,16 @@ builder.Services.AddMessageHandler(nameof(OrderBookingAggregate), runtimeConfigu
                 into.Projection<BookingProjection>();
                 // into.Projection<BookingDetailProjection>();
             });
+        source.Stream(nameof(NotificationAggregate),
+        from => from.AzureTableStorage(connectionString, nameof(NotificationAggregate)),
+        into =>
+        {
+            into.Aggregate<NotificationAggregate>()
+                .EnableOutbox(nameof(NotificationAggregate), nameof(OrderBooking.Api), pipeline =>
+                {
+                    pipeline.RouteMessages(to => to.Topic("asynchandler-notifications-topic", builder.Configuration["ServiceBusConnection"]));
+                });
+        });
     });
 });
 
@@ -85,7 +97,7 @@ async (
     ) =>
 {
     var booking = await repo.Get(id);
-    booking.PlacePurchaseOrder(new PurchaseOrder(command.Name, command.Amount));
+    booking.PlacePurchaseOrder(command.BuyerId, command.Name, command.PurchaseOrder);
 
     await repo.Flush();
 
@@ -105,7 +117,7 @@ app.MapGet("api/pendingOrders", async(SearchClient client) =>
 
     return TypedResults.Ok(pendingOrders);
 });
-app.MapPost("api/{bookingId}/confirm", 
+app.MapPost("api/{bookingId}/confirm",
 async (IEventSourcedRepository<OrderBookingAggregate> repo, string bookingId) =>
 {
     var aggregate = await repo.Get(bookingId);
@@ -115,5 +127,15 @@ async (IEventSourcedRepository<OrderBookingAggregate> repo, string bookingId) =>
     return Results.Ok(aggregate.Id);
 }
 );
+
+app.MapPost("api/notifications",
+async(IEventSourcedRepository<NotificationAggregate> repo, SetConfirmationMail command) =>
+{
+    var aggregate = await repo.Get(command.BuyerId);
+    aggregate.SetConfirmationEmail(command.EmailAddress);
+    await repo.Flush();
+
+    return Results.Ok(aggregate.Id);
+});
 
 app.Run();

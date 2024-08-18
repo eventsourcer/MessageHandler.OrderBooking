@@ -5,7 +5,7 @@ public interface IPersistAvailableConfirmationMails
     Task MarkAsSent(ConfirmationMail mail);
 
     Task MarkAsPending(ConfirmationMail mail);
-    Task<ConfirmationMail?> GetConfirmationMail(string id);
+    Task<ConfirmationMail> GetConfirmationMail(string id);
 
     Task Insert(ConfirmationMail mail);
 

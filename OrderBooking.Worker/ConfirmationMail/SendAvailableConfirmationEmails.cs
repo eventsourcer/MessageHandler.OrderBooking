@@ -30,11 +30,12 @@ public class SendAvailableConfirmationEmails
 
                 logger?.LogInformation("Confirmation mail marked as sent...");
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 await storage.MarkAsPending(email);
 
-                logger?.LogInformation("Sending confirmation mail failed, marked as pending...");
+                if(logger.IsEnabled(LogLevel.Error))
+                    logger.LogError($"Sending confirmation mail failed, marked as pending...Error: {e.Message}");
             }
         }
         else

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OrderBooking\OrderBooking.csproj" />
     <ProjectReference Include="..\OrderBooking.Projections\OrderBooking.Projections.csproj" />
+    <ProjectReference Include="..\NotificationPreferences\NotificationPreferences.csproj" />
   </ItemGroup>
 
 </Project>

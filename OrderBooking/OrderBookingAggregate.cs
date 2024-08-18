@@ -27,11 +27,11 @@ public class OrderBookingAggregate : EventSourced, IApply<BookingStarted>, IAppl
         _confirmed = true;
     }
 
-    public void PlacePurchaseOrder(PurchaseOrder purchaseOrder)
+    public void PlacePurchaseOrder(string buyerId, string name, PurchaseOrder purchaseOrder)
     {
         if(_alreadyStarted) return;
         
-        Emit(new BookingStarted(Id, purchaseOrder));
+        Emit(new BookingStarted(Id, buyerId, name, purchaseOrder));
     }
     public void ConfirmSalesOrder()
     {
