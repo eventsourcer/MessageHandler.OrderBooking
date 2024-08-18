@@ -1,3 +1,4 @@
+using Azure.Search.Documents;
 using MessageHandler.EventSourcing;
 using MessageHandler.EventSourcing.AzureTableStorage;
 using MessageHandler.EventSourcing.DomainModel;
@@ -6,9 +7,11 @@ using MessageHandler.EventSourcing.Projections;
 using MessageHandler.Runtime;
 using MessageHandler.Runtime.AtomicProcessing;
 using MessageHandler.Runtime.Licensing;
+using Microsoft.AspNetCore.Http.HttpResults;
 using OrderBooking;
 using OrderBooking.Api;
 using OrderBooking.Api.Commands;
+using OrderBooking.Api.Models;
 using OrderBooking.Api.Services;
 using OrderBooking.Events;
 using OrderBooking.Projections;
@@ -94,6 +97,23 @@ app.MapGet("api/orderbooking/{id}", async(IRestoreProjections<Booking> projector
 );
 app.MapGet("api/orderbookingdetailed/{id}", async(IRestoreProjections<BookingDetail> projector, string id) =>
     Results.Ok(await projector.Restore(nameof(OrderBookingAggregate), id))
+);
+app.MapGet("api/pendingOrders", async(SearchClient client) =>
+{
+    var response = await client.SearchAsync<SalesOrder>("*");
+    var pendingOrders = response.Value.GetResults().Select(x => x.Document);
+
+    return TypedResults.Ok(pendingOrders);
+});
+app.MapPost("api/{bookingId}/confirm", 
+async (IEventSourcedRepository<OrderBookingAggregate> repo, string bookingId) =>
+{
+    var aggregate = await repo.Get(bookingId);
+    aggregate.ConfirmSalesOrder();
+    await repo.Flush();
+
+    return Results.Ok(aggregate.Id);
+}
 );
 
 app.Run();

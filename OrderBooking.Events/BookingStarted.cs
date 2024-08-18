@@ -7,4 +7,5 @@ public class BookingStarted(string bookingId, PurchaseOrder purchaseOrder) : Sou
     public string BookingId => bookingId;
     public string Name => purchaseOrder.Name;
     public PurchaseOrder PurchaseOrder => purchaseOrder;
+    public string BuyerId => purchaseOrder.BuyerId;
 }
