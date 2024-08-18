@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.WebUI.Seller",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBooking.Worker", "OrderBooking.Worker\OrderBooking.Worker.csproj", "{03398897-1FF9-4FCC-A963-0DC697DDE2E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationPreferences.Events", "NotificationPreferences.Events\NotificationPreferences.Events.csproj", "{B383F726-D3C4-4455-A72F-6468927DD9EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationPreferences", "NotificationPreferences\NotificationPreferences.csproj", "{0447B52B-6E2B-41DB-80E8-5E0F62F8D30A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +76,13 @@ Global
 		{03398897-1FF9-4FCC-A963-0DC697DDE2E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03398897-1FF9-4FCC-A963-0DC697DDE2E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03398897-1FF9-4FCC-A963-0DC697DDE2E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B383F726-D3C4-4455-A72F-6468927DD9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B383F726-D3C4-4455-A72F-6468927DD9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B383F726-D3C4-4455-A72F-6468927DD9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B383F726-D3C4-4455-A72F-6468927DD9EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0447B52B-6E2B-41DB-80E8-5E0F62F8D30A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0447B52B-6E2B-41DB-80E8-5E0F62F8D30A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0447B52B-6E2B-41DB-80E8-5E0F62F8D30A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0447B52B-6E2B-41DB-80E8-5E0F62F8D30A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

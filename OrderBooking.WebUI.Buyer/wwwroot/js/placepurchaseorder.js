@@ -54,10 +54,11 @@ class PlacePurchaseOrder extends HTMLElement{
 
         let cmd = {
             bookingId: bookingId,
+            buyerId: "sarwan",
             name: "Mr. Buyer",
             purchaseOrder: {            
                 amount: event.target.querySelector("#amount").valueAsNumber
-            }            
+            }           
         }
         let uri = "http://localhost:5291/api/orderbooking/" + bookingId;
 
