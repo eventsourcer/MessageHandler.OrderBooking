@@ -16,7 +16,7 @@ public class ConfirmationMailProjection :
     }
 
     public void Project(ConfirmationMail confirmationMail, SalesOrderConfirmed msg)
-    {          
+    {
         confirmationMail.Status = "Pending";
     }
 }

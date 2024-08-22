@@ -18,7 +18,7 @@ public class IndexSalesOrder : IHandle<BookingStarted>
 
     public async Task Handle(BookingStarted message, IHandlerContext context)
     {
-        _logger?.LogInformation("Received BookingStarted, indexing the sales order...");
+        _logger?.LogInformation($"{DateTime.Now}: Received BookingStarted, indexing the sales order...");
 
         var salesOrder = await _client.GetOrCreateSalesOrder(message.BookingId);
 

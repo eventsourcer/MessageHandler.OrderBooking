@@ -90,11 +90,7 @@ app.UseCors("all");
 app.MapHub<EventsHub>("/events");
 
 app.MapPost("api/orderbooking/{id}", 
-async (
-    IEventSourcedRepository<OrderBookingAggregate> repo,
-    string id,
-    PlacePurchaseOrder command
-    ) =>
+async (IEventSourcedRepository<OrderBookingAggregate> repo, string id, PlacePurchaseOrder command) =>
 {
     var booking = await repo.Get(id);
     booking.PlacePurchaseOrder(command.BuyerId, command.Name, command.PurchaseOrder);
@@ -136,6 +132,17 @@ async(IEventSourcedRepository<NotificationAggregate> repo, SetConfirmationMail c
     await repo.Flush();
 
     return Results.Ok(aggregate.Id);
+});
+
+app.MapPost("api/setpending", 
+    async(IEventSourcedRepository<OrderBookingAggregate> repo, string bookingId) =>
+{
+    var aggregate = await repo.Get(bookingId);
+    aggregate.SetBookingAsPending(bookingId);
+
+    await repo.Flush();
+
+    return Results.Ok(aggregate);
 });
 
 app.Run();

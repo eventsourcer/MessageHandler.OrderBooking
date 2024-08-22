@@ -109,7 +109,7 @@ OUTPUT
             return new ConfirmationMail();
         }
 
-        return await ToConfirmationMail1(dataReader);
+        return await ToConfirmationMail2(dataReader);
     }
 
     public async Task Insert(ConfirmationMail mail)

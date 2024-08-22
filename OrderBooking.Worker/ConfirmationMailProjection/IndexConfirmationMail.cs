@@ -17,7 +17,7 @@ public class IndexConfirmationMail : IHandle<BookingStarted>
 
     public async Task Handle(BookingStarted message, IHandlerContext context)
     {
-        _logger?.LogInformation("Received BookingStarted, indexing the confirmation mail...");
+        _logger?.LogInformation($"{DateTime.Now}: Received BookingStarted, indexing the confirmation mail...");
 
         var confirmationMail = await _client.GetConfirmationMail(message.BookingId);
 
